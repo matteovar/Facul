@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CarbonMate - Notícias</title>
+    <link rel="stylesheet" href="noticias.css">
+    <link rel="stylesheet" href="./user-menu.css">
+</head>
+<body>
+    <header class="header">
+        <a href="./index.html" class="logo">CarbonMate</a>
+        
+        <nav id="navigation" class="navigation">
+            <a href="./Carbono.html">Carbono</a>
+            <a href="./Calculadora.html">Calculadora</a>
+            <a href="./Mapas.html">Mapas</a>
+            <a href="./Noticias.html">Noticias</a>
+            <a href="./signin.html">Entrar</a>
+            <a href="./register.html">Cadastrar</a>
+        </nav>
+    </header>
+
+    <div id="news-container">
+    </div>
+
+    <footer>
+        <p>&copy; 2023 CarbonMate. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        const newsContainer = document.getElementById('news-container');
+
+        fetch(`https://newsapi.org/v2/everything?q=carbon-dioxide-emission&apiKey=f46e929f71c64db3ad7e6f4c1fc19b1b&language=en&pageSize=10&sortBy=popularity&status=ok&urlToImage`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    data.articles.forEach(article => {
+                        const articleElement = document.createElement('div');
+                        articleElement.classList.add('article');
+                        
+                        const imageElement = document.createElement('img');
+                        imageElement.src = article.urlToImage || 'placeholder-image.jpg'; // Use uma imagem padrão se a URL da imagem estiver ausente
+                        imageElement.alt = article.title;
+                        imageElement.classList.add('article-image');
+
+                        const titleElement = document.createElement('h2');
+                        titleElement.textContent = article.title;
+
+                        const descriptionElement = document.createElement('p');
+                        descriptionElement.textContent = article.description;
+
+                        const linkElement = document.createElement('a');
+                        linkElement.href = article.url;
+                        linkElement.textContent = 'Leia mais';
+
+                        articleElement.appendChild(imageElement);
+                        articleElement.appendChild(titleElement);
+                        articleElement.appendChild(descriptionElement);
+                        articleElement.appendChild(linkElement);
+
+                        newsContainer.appendChild(articleElement);
+                    });
+                } else {
+                    console.error('Erro ao buscar notícias:', data.message);
+                }
+            })
+            .catch(error => console.error('Erro ao buscar notícias:', error));
+
+            document.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('token');
+    const navigation = document.getElementById('navigation');
+
+    if (token) {
+        // Se o usuário estiver logado, esconde o menu de login/registro e exibe o menu do usuário
+        navigation.innerHTML = `
+            <a href="./Carbono.html">Carbono</a>
+            <a href="./Calculadora.html">Calculadora</a>
+            <a href="./Mapas.html">Mapas</a>
+            <a href="./Noticias.html">Noticias</a>
+            <a href="./profile.html">Perfil</a>
+            <button id="logoutBtn">Logout</button>
+        `;
+    } else {
+        // Se o usuário não estiver logado, exibe o menu de login/registro
+        navigation.innerHTML = `
+            <a href="./Carbono.html">Carbono</a>
+            <a href="./Calculadora.html">Calculadora</a>
+            <a href="./Mapas.html">Mapas</a>
+            <a href="./Noticias.html">Noticias</a>
+            <a href="./signin.html">Entrar</a>
+            <a href="./register.html">Cadastrar</a>
+        `;
+    }
+
+    // Adiciona o evento de logout apenas se o botão existir
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('token');
+            window.location.href = './signin.html';
+        });
+    }
+});
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            const navigation = document.getElementById('navigation');
+
+            if (token) {
+                // Se o usuário estiver logado, esconde o menu de login/registro e exibe o menu do usuário
+                navigation.innerHTML = `
+                    <a href="./Carbono.html">Carbono</a>
+                    <a href="./Calculadora.html">Calculadora</a>
+                    <a href="./Mapas.html">Mapas</a>
+                    <a href="./Noticias.html">Noticias</a>
+                    <a href="./profile.html">Perfil</a>
+                    <button id="logoutBtn">Logout</button>
+                `;
+            } else {
+                // Se o usuário não estiver logado, exibe o menu de login/registro
+                navigation.innerHTML = `
+                    <a href="./Carbono.html">Carbono</a>
+                    <a href="./Calculadora.html">Calculadora</a>
+                    <a href="./Mapas.html">Mapas</a>
+                    <a href="./Noticias.html">Noticias</a>
+                    <a href="./signin.html">Entrar</a>
+                    <a href="./register.html">Cadastrar</a>
+                `;
+            }
+
+            // Adiciona o evento de logout apenas se o botão existir
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', () => {
+                    localStorage.removeItem('token');
+                    window.location.href = './signin.html';
+                });
+            }
+        });
+
+
+    </script>
+</body>
+</html>

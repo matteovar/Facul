@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CarbonMate</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <header class="header">
+        <a href="./index.html" class="logo">CarbonMate</a>
+        
+        <nav id="navigation" class="navigation">
+            <a href="./Carbono.html">Carbono</a>
+            <a href="./Calculadora.html">Calculadora</a>
+            <a href="./Mapas.html">Mapas</a>
+            <a href="./Noticias.html">Noticias</a>
+            <a href="./signin.html">Entrar</a>
+            <a href="./register.html">Cadastrar</a>
+        </nav>
+    </header>
+
+    <section>
+        <div>
+            <img src="../assets/carbon_footprint.jpg" id="banner">
+            <h1 id="txtbanner2">Bem-Vindo</h1>
+            <h1 id="txtbanner">CarbonMate</h1>
+        </div>
+    </section>
+
+    <section class="content">
+        <h1>O que é o CarbonMate?</h1>
+        <p>O CarbonMate é uma plataforma online inovadora, desenvolvida com o propósito de conscientizar e capacitar indivíduos a monitorar e reduzir suas emissões de carbono no dia a dia. Em um mundo cada vez mais afetado pelo aquecimento global, a emissão de carbono é uma das principais responsáveis por esse cenário, e o CarbonMate surge como uma ferramenta essencial para combater essa realidade.</p>
+    </section>
+
+    <section class="content2">
+        <h1>Para que o CarbonMate pode te ajudar?</h1>
+        <h2 class="topic-title">1. Calculadora de Pegada de Carbono</h2>
+        <p><strong>Monitoramento Personalizado:</strong> Através da calculadora de pegada de carbono, os usuários podem inserir dados sobre suas atividades diárias, como transporte, consumo de energia, alimentação, entre outros. A plataforma fornece um relatório detalhado sobre a quantidade de carbono emitida, permitindo que os usuários tenham uma visão clara de seu impacto ambiental.</p>
+        <p><strong>Orientação para Redução:</strong> Com base nos resultados, o CarbonMate oferece sugestões práticas e personalizadas para reduzir a pegada de carbono, incentivando práticas mais sustentáveis no cotidiano.</p>
+
+        <h2 class="topic-title">2. Infográficos Interativos</h2>
+        <p><strong>Dados Globais:</strong> A plataforma disponibiliza infográficos interativos que apresentam dados globais sobre emissões de carbono. Esses recursos são projetados para serem fáceis de entender, permitindo que os usuários visualizem tendências e padrões de emissões em diferentes regiões do mundo.</p>
+        <p><strong>Educação Ambiental:</strong> Através desses infográficos, o CarbonMate busca educar o público sobre os impactos das emissões de carbono e as consequências para o meio ambiente, promovendo uma compreensão mais profunda do assunto.</p>
+    </section>
+    
+    <footer>
+        <p1>&copy; 2023 CarbonMate. Todos os direitos reservados.</p1>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+                const token = localStorage.getItem('token');
+                const navigation = document.getElementById('navigation');
+
+                if (token) {
+                    // Se o usuário estiver logado, esconde o menu de login/registro e exibe o menu do usuário
+                    
+                    navigation.innerHTML = `
+                        <link rel="stylesheet" href="./user-menu.css"></link>
+                        <a href="./Carbono.html">Carbono</a>
+                        <a href="./Calculadora.html">Calculadora</a>
+                        <a href="./Mapas.html">Mapas</a>
+                        <a href="./Noticias.html">Noticias</a>
+                        <a href="./profile.html">Perfil</a>
+                        <button id="logoutBtn">Logout</button>
+                    `;
+                } else {
+                    // Se o usuário não estiver logado, exibe o menu de login/registro
+                    navigation.innerHTML = `
+                        <a href="./Carbono.html">Carbono</a>
+                        <a href="./Calculadora.html">Calculadora</a>
+                        <a href="./Mapas.html">Mapas</a>
+                        <a href="./Noticias.html">Noticias</a>
+                        <a href="./signin.html">Entrar</a>
+                        <a href="./register.html">Cadastrar</a>
+                    `;
+                }
+
+                // Adiciona o evento de logout apenas se o botão existir
+                const logoutBtn = document.getElementById('logoutBtn');
+                if (logoutBtn) {
+                    logoutBtn.addEventListener('click', () => {
+                        localStorage.removeItem('token');
+                        window.location.href = './signin.html';
+                    });
+                }
+            });
+    </script>
+</body>
+</html>

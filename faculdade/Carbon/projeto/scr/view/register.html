@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - CarbonMate</title>
+    <link rel="stylesheet" href="./register.css">
+</head>
+<body>
+    <header class="header">
+        <a href="./index.html" class="logo">CarbonMate</a>
+        
+        <nav id="navigation" class="navigation">
+            <a href="./Carbono.html">Carbono</a>
+            <a href="./Calculadora.html">Calculadora</a>
+            <a href="./Mapas.html">Mapas</a>
+            <a href="./Noticias.html">Noticias</a>
+            <a href="./signin.html">Entrar</a>
+            <a href="./register.html">Cadastrar</a>
+        </nav>
+    </header>
+
+    <section class="content">
+        <h1>Cadastro</h1>
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="name">Nome:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Senha:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">Confirmação de Senha:</label>
+                <input type="password" id="confirm-password" name="confirm-password" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Cadastrar</button>
+            </div>
+        </form>
+        <p>Já tem uma conta? <a href="./signin.html">Entrar aqui</a></p>
+    </section>
+
+    <footer>
+        <p>&copy; 2023 CarbonMate. Todos os direitos reservados.</p>
+    </footer>
+
+    <!-- Elemento de mensagem de feedback -->
+    <div id="message"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            const navigation = document.getElementById('navigation');
+
+            if (token) {
+                // Se o usuário estiver logado, esconde o menu de login/registro e exibe o menu do usuário
+                navigation.innerHTML = `
+                    <a href="./Carbono.html">Carbono</a>
+                    <a href="./Calculadora.html">Calculadora</a>
+                    <a href="./Mapas.html">Mapas</a>
+                    <a href="./Noticias.html">Noticias</a>
+                    <div id="user-info">
+                        <a href="./profile.html">Perfil</a>
+                        <button id="logoutBtn">Logout</button>
+                    </div>
+                `;
+            } else {
+                // Se o usuário não estiver logado, exibe o menu de login/registro
+                navigation.innerHTML = `
+                    <a href="./Carbono.html">Carbono</a>
+                    <a href="./Calculadora.html">Calculadora</a>
+                    <a href="./Mapas.html">Mapas</a>
+                    <a href="./Noticias.html">Noticias</a>
+                    <a href="./signin.html">Entrar</a>
+                    <a href="./register.html">Cadastrar</a>
+                `;
+            }
+
+            // Adiciona o evento de logout
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                localStorage.removeItem('token');
+                window.location.href = './signin.html';
+            });
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            if (password !== confirmPassword) {
+                showMessage('As senhas não coincidem.', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:5000/api/users/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showMessage(data.message, 'success');
+                    setTimeout(() => {
+                        window.location.href = './signin.html';
+                    }, 2000); // Redireciona após 2 segundos
+                } else {
+                    showMessage(data.message || 'Erro ao registrar!', 'error');
+                }
+            } catch (error) {
+                showMessage('Erro ao se conectar com o servidor!', 'error');
+            }
+        });
+
+        function showMessage(message, type) {
+            const messageElement = document.getElementById('message');
+            messageElement.textContent = message;
+            messageElement.style.display = 'block';
+            messageElement.style.backgroundColor = type === 'success' ? '#4CAF50' : '#f44336';
+
+            setTimeout(() => {
+                messageElement.style.display = 'none';
+            }, 2000); // Esconde a mensagem após 3 segundos
+        }
+    </script>
+</body>
+</html>
